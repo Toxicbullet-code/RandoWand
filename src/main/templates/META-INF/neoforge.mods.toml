@@ -1,0 +1,44 @@
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml" #mandatory
+
+# A version range to match for said mod loader
+loaderVersion="[2,)" #mandatory
+
+# The license for your mod.
+license="MIT"
+
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+
+# The modid of the mod - must exactly match your Java MODID string
+modId="randowand" #mandatory
+
+# The version number of the mod (pulls automatically from gradle.properties)
+version="${mod_version}" #mandatory
+
+# A display name for the mod, displayed in the mod UI
+displayName="Randomization Wand" #mandatory
+
+# The authors of the mod, displayed in the mod UI
+authors="Toxic_bullet"
+
+# The description text for the mod (multi line!)
+description='''
+a tool made to help with building gradients easier
+'''
+
+# Dependencies configuration for NeoForge
+[[dependencies.randowand]]
+modId="neoforge" #mandatory
+type="required" #mandatory
+versionRange="[21,)" #mandatory
+ordering="NONE"
+side="BOTH"
+
+# Dependencies configuration for Minecraft (Open-ended from 1.21.1 onwards)
+[[dependencies.randowand]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,)" # The comma with no closing bracket means no upper limit restriction!
+ordering="NONE"
+side="BOTH"
