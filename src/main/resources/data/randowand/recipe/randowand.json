@@ -2,17 +2,27 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "  D",
-    " S ",
+    " GD",
+    " SI",
     "S  "
   ],
   "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+
     "D": {
       "item": "minecraft:diamond"
     },
+
     "S": {
       "item": "minecraft:stick"
     }
+
   },
   "result": {
     "id": "randowand:randowand",

@@ -67,13 +67,18 @@ public class RandoWandItem extends Item {
         // 2. PLACING: Normal Right Click
         List<ItemStack> palette = new ArrayList<>(wand.getOrDefault(WAND_PALETTE, List.of()));
         if (!palette.isEmpty()) {
+
             int index = context.getLevel().getRandom().nextInt(palette.size());
+
             ItemStack toPlace = palette.get(index);
 
             if (toPlace.getItem() instanceof BlockItem block) {
                 BlockHitResult hit = new BlockHitResult(
+
                         context.getClickLocation(),
+
                         context.getClickedFace(),
+
                         context.getClickedPos(),
                         false
                 );
@@ -128,8 +133,11 @@ public class RandoWandItem extends Item {
 
         List<ItemStack> palette = stack.get(WAND_PALETTE);
         if (palette != null && !palette.isEmpty()) {
+
             tooltip.add(Component.literal(""));
+
             tooltip.add(Component.literal("§6Contents:§r"));
+
             for (ItemStack s : palette) {
                 tooltip.add(Component.literal("- " + s.getCount() + "x " + s.getHoverName().getString()));
             }
