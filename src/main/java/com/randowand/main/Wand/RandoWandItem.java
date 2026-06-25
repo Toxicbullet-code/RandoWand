@@ -30,28 +30,26 @@ public class RandoWandItem extends Item {
         if (player.isShiftKeyDown()) {
             ItemStack offhand = player.getOffhandItem();
 
-            // Offhand has a block -> Store it
+            // Adding blocks: Now consumes in BOTH Creative and Survival
             if (!offhand.isEmpty() && offhand.getItem() instanceof BlockItem) {
                 List<ItemStack> list = new ArrayList<>(wand.getOrDefault(WAND_PALETTE, List.of()));
-                list.add(offhand.copy());
+
+                ItemStack toStore = offhand.copy();
+                // Always shrink the offhand, regardless of Creative mode
+                offhand.shrink(offhand.getCount());
+
+                list.add(toStore);
                 wand.set(WAND_PALETTE, list);
-
-                // Only consume item in survival
-                if (!player.isCreative()) {
-                    offhand.shrink(offhand.getCount());
-                }
-
                 player.displayClientMessage(Component.literal("Stored stack!"), true);
                 return InteractionResult.SUCCESS;
             }
-            // Offhand is EMPTY -> Remove the last added block (Undo)
+            // Removing blocks: Enabled for all
             else if (offhand.isEmpty()) {
                 List<ItemStack> palette = new ArrayList<>(wand.getOrDefault(WAND_PALETTE, List.of()));
                 if (!palette.isEmpty()) {
                     ItemStack removedStack = palette.remove(palette.size() - 1);
                     wand.set(WAND_PALETTE, palette);
 
-                    // Give it back
                     if (!player.getInventory().add(removedStack)) {
                         player.drop(removedStack, false);
                     }
@@ -90,27 +88,17 @@ public class RandoWandItem extends Item {
 
                 InteractionResult res = block.useOn(newContext);
 
+                // Consumption logic: Infinite in Creative
                 if (res.consumesAction()) {
-                    // CREATIVE MODE CHECK: Only consume and break if not creative
                     if (!player.isCreative()) {
                         toPlace.shrink(1);
                         if (toPlace.isEmpty()) {
                             palette.remove(index);
                         }
                         wand.set(WAND_PALETTE, palette);
-
-                        List<ItemStack> safetyCopy = new ArrayList<>(palette);
                         wand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
-
-                        if (wand.isEmpty()) {
-                            for (ItemStack remainingStack : safetyCopy) {
-                                if (!remainingStack.isEmpty()) {
-                                    player.drop(remainingStack, false);
-                                }
-                            }
-                            player.displayClientMessage(Component.literal("The wand broke and spilled its contents!"), true);
-                        }
                     }
+                    // If Creative, we simply do nothing to the palette, making it infinite
                 }
                 return res;
             }
@@ -123,7 +111,7 @@ public class RandoWandItem extends Item {
         tooltip.add(Component.literal("§e[Controls]§r"));
         tooltip.add(Component.literal("- Shift + Right-Click: Store/Undo"));
         tooltip.add(Component.literal("- Right-Click: Place random block"));
-        tooltip.add(Component.literal("- Creative mode: Infinite blocks"));
+        tooltip.add(Component.literal("- Creative: Uses items to store, then infinite placement"));
 
         List<ItemStack> palette = stack.get(WAND_PALETTE);
         if (palette != null && !palette.isEmpty()) {
